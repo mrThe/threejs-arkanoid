@@ -34,7 +34,7 @@ var Bar = {
   },
 
   process_collision: function() {
-    if(this.game.objects.ball.check_collision([this.object]) !== false) {
+    if(this.game.objects.ball.check_collision(this.object) !== false) {
       this.game.objects.ball.direction_y *= -1;
     }
   }
