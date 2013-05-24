@@ -35,7 +35,6 @@ var Game = {
     }
   },
 
-
   init: function() {
     this.init_engine();
     this.init_objects();
@@ -53,32 +52,39 @@ var Game = {
   },
 
   init_objects: function() {
-    Game.objects.ball = Ball.init(Game, Config);
-    Game.scene.add(Game.objects.ball.object);
-
 
     Game.objects.bricks = Bricks.init(Game, Config);
-    Game.objects.bricks.object.forEach(function(brick){
-      Game.scene.add(brick);
-    });
+    Game.add_object(Game.objects.bricks);
 
     Game.objects.bar = Bar.init(Game, Config);
-    Game.scene.add(Game.objects.bar.object);
+    Game.add_object(Game.objects.bar);
 
+    Game.objects.ball = Ball.init(Game, Config);
+    Game.add_object(Game.objects.ball);
   },
 
   animate: function() {
     stats.begin();
-
     Game.renderer.render(Game.scene, Game.camera);
 
+    // Can't do foreach here, becouse need correct ordering
     Game.objects.bricks.process();
     Game.objects.bar.process();
     Game.objects.ball.process();
 
     requestAnimationFrame(Game.animate);
-
     stats.end();
+  },
+
+  add_object: function(object) {
+    var obj = object.object;
+    if(obj instanceof Array) {
+      obj.forEach(function(obj_){
+        Game.scene.add(obj_);
+      });
+    } else {
+      Game.scene.add(obj);
+    }
   }
 }
 
